@@ -48,7 +48,9 @@
     "vue-tsc": "0.40.9"
   },
   "dependencies": {
+    "@highlightjs/vue-plugin": "^2.1.0",
     "electron-updater": "5.2.1",
+    "highlight.js": "^11.6.0",
     "monaco-editor": "^0.34.0",
     "sass": "^1.54.8",
     "vue": "3.2.38"
