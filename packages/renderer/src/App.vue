@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import ReactiveCounter from '/@/components/ReactiveCounter.vue';
-import ReactiveHash from '/@/components/ReactiveHash.vue';
-import ElectronVersions from '/@/components/ElectronVersions.vue';
 import VEditor from '/@/components/VEditor.vue';
 
 </script>
@@ -11,8 +8,7 @@ import VEditor from '/@/components/VEditor.vue';
 </template>
 
 <style>
-fieldset {
-  margin: 2rem;
-  padding: 1rem;
+body {
+  margin: 0;
 }
 </style>

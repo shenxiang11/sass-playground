@@ -1,5 +1,6 @@
 import { mkdirSync, existsSync, readFile } from 'node:fs';
 import { writeFile, readdir } from 'node:fs/promises';
+import {compileAsync} from 'sass';
 import variablesTpl from '../sass-template/variables.scss?raw';
 import stylesTpl from '../sass-template/styles.scss?raw';
 import operatorsTpl from '../sass-template/operators.scss?raw';
@@ -58,6 +59,17 @@ export async function setupSassTemplate(): Promise<boolean> {
     console.error(e)
     return false;
   }
+}
+
+export async function writeScssFile(filename: string, filecontent: string) {
+  return writeFile(`${getUserHome()}/${folderName}/${filename}`, filecontent);
+}
+
+export async function writeScssFileAndCompile(filename: string, filecontent: string): Promise<string> {
+  const sassFileName = `${getUserHome()}/${folderName}/${filename}`;
+  await writeFile(sassFileName, filecontent);
+  const result = await compileAsync(sassFileName, {});
+  return result.css;
 }
 
 export async function getAllScssFiles() {

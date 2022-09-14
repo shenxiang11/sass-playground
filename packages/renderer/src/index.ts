@@ -4,15 +4,15 @@ import App from '/@/App.vue';
 import {readdirSync, setupRootFolder, setupSassTemplate, workspace } from '#preload';
 import css from 'highlight.js/lib/languages/css';
 import hljs from 'highlight.js';
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 hljs.registerLanguage('css', css);
 
 setupRootFolder();
+setupSassTemplate();
 
-// setupSassTemplate().then(res => {
-//   console.log(res)
-// });
+const app = createApp(App);
+app.use(ElementPlus);
 
-console.log(readdirSync(workspace));
-
-createApp(App).mount('#app');
+app.mount('#app');
