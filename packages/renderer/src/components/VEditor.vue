@@ -5,11 +5,10 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
-import {computed, nextTick, onMounted, ref, watch} from 'vue';
-import {readFile, compileString, getAllScssFiles, writeScssFile, workspace, writeScssFileAndCompile} from '#preload';
-import highlightPlugin from "@highlightjs/vue-plugin";
+import {nextTick, onMounted, ref} from 'vue';
+import {readFile, getAllScssFiles, workspace, writeScssFileAndCompile} from '#preload';
+import highlightPlugin from '@highlightjs/vue-plugin';
 
-// @ts-ignore
 self.MonacoEnvironment = {
   getWorker(_: any, label: string) {
     if (label === 'json') {
@@ -25,19 +24,19 @@ self.MonacoEnvironment = {
       return new tsWorker();
     }
     return new editorWorker();
-  }
+  },
 };
 
 const highlightjs = highlightPlugin.component;
 
-const scssFiles = ref<string[]>([])
+const scssFiles = ref<string[]>([]);
 
 const editorRef = ref();
 const content = ref('');
 
 const compiledContent = ref('');
 
-const activeScssFile = ref('')
+const activeScssFile = ref('');
 
 let editor: any;
 
@@ -48,7 +47,7 @@ onMounted(async () => {
     language: 'scss',
   });
 
-  editor.onDidChangeModelContent((e) => {
+  editor.onDidChangeModelContent(() => {
     content.value = editor.getValue();
   });
 
@@ -62,7 +61,7 @@ onMounted(async () => {
       activeScssFile.value = res.filenames[0];
     }
   });
-})
+});
 
 async function handleScssFileChange(name: string) {
   const contentFromFile = await readFile(`${workspace}/${name}`, { encoding: 'utf8' });
@@ -74,9 +73,9 @@ async function handleScssFileChange(name: string) {
 async function saveAndCompile() {
   const result = await writeScssFileAndCompile(activeScssFile.value,editor?.getValue() ?? '', {
     autoprefixer: {
-      overrideBrowserslist: [">0.02%", "not dead"],
+      overrideBrowserslist: ['>0.02%', 'not dead'],
     },
-  })
+  });
   compiledContent.value = result;
 }
 </script>
@@ -84,16 +83,34 @@ async function saveAndCompile() {
 <template>
   <div class="container">
     <div class="tab-wrapper">
-      <el-tabs class="tab-main" v-model="activeScssFile" @tab-change="handleScssFileChange">
-        <el-tab-pane v-for="item in scssFiles" :key="item" :label="item" :name="item" />
+      <el-tabs
+        v-model="activeScssFile"
+        class="tab-main"
+        @tab-change="handleScssFileChange"
+      >
+        <el-tab-pane
+          v-for="item in scssFiles"
+          :key="item"
+          :label="item"
+          :name="item"
+        />
       </el-tabs>
       <div class="tab-right-action">
-        <el-button type="primary" size="small" @click="saveAndCompile">编译</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="saveAndCompile"
+        >
+          编译
+        </el-button>
         <el-button size="small">设置</el-button>
       </div>
     </div>
     <div class="editor-container">
-      <div ref="editorRef" class="main-editor"></div>
+      <div
+        ref="editorRef"
+        class="main-editor"
+      ></div>
       <highlightjs
         class="result-preview"
         language="css"

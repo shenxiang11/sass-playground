@@ -1,4 +1,4 @@
-import { mkdirSync, existsSync, readFile } from 'node:fs';
+import { mkdirSync, existsSync } from 'node:fs';
 import { writeFile, readdir } from 'node:fs/promises';
 import {compileAsync} from 'sass';
 import variablesTpl from '../sass-template/variables.scss?raw';
@@ -8,9 +8,8 @@ import nestingTpl from '../sass-template/nesting.scss?raw';
 import mixinsTpl from '../sass-template/mixins.scss?raw';
 import extendTpl from '../sass-template/extend.scss?raw';
 import baseTpl from '../sass-template/_base.scss?raw';
-import {readdirSync} from './index';
 import postcss from 'postcss';
-import autoprefixer from 'autoprefixer';
+import * as autoprefixer from 'autoprefixer';
 
 export function getUserHome(): string {
   const userHome = process.env.HOME;
@@ -31,7 +30,7 @@ export function setupRootFolder(): boolean {
   const fullPathName = `${getUserHome()}/${folderName}`;
 
   if (existsSync(fullPathName)) {
-    return false
+    return false;
   }
 
   // 如果不存在，则创建
@@ -58,7 +57,7 @@ export async function setupSassTemplate(): Promise<boolean> {
 
     return true;
   } catch (e) {
-    console.error(e)
+    console.error(e);
     return false;
   }
 }
@@ -71,7 +70,7 @@ export async function writeScssFileAndCompile(filename: string, filecontent: str
   const sassFileName = `${getUserHome()}/${folderName}/${filename}`;
   await writeFile(sassFileName, filecontent);
   const result = await compileAsync(sassFileName, {});
-  let css = result.css
+  let css = result.css;
 
   if (postCSSPluginsConfig) {
     const plugins = [];
@@ -80,26 +79,26 @@ export async function writeScssFileAndCompile(filename: string, filecontent: str
       plugins.push(autoprefixer(autoprefixerConfig));
     }
 
-    const result = await postcss(plugins).process(css)
-    css = result.css
+    const result = await postcss(plugins).process(css);
+    css = result.css;
   }
 
   return css;
 }
 
 export async function getAllScssFiles() {
-  const filenames = await readdir(workspace)
+  const filenames = await readdir(workspace);
 
   const pathMap = (() => {
     const result: any = {};
     filenames.forEach(filename => {
       result[filename] = `${workspace}/${filename}`;
-    })
+    });
     return result;
   })();
 
   return {
     filenames,
     pathMap,
-  }
+  };
 }

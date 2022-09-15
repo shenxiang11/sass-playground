@@ -1,11 +1,11 @@
 import {createApp} from 'vue';
 import 'highlight.js/styles/github.css';
 import App from '/@/App.vue';
-import {readdirSync, setupRootFolder, setupSassTemplate, workspace } from '#preload';
+import {setupRootFolder, setupSassTemplate} from '#preload';
 import css from 'highlight.js/lib/languages/css';
 import hljs from 'highlight.js';
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 
 hljs.registerLanguage('css', css);
 
