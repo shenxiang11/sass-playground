@@ -9,7 +9,8 @@ import mixinsTpl from '../sass-template/mixins.scss?raw';
 import extendTpl from '../sass-template/extend.scss?raw';
 import baseTpl from '../sass-template/_base.scss?raw';
 import postcss from 'postcss';
-import * as autoprefixer from 'autoprefixer';
+
+const  autoprefixer = require('autoprefixer');
 
 export function getUserHome(): string {
   const userHome = process.env.HOME;
