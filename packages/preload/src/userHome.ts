@@ -1,5 +1,5 @@
-import { mkdirSync, existsSync } from 'node:fs';
-import { writeFile, readdir } from 'node:fs/promises';
+import {mkdirSync, existsSync} from 'node:fs';
+import {writeFile, readdir} from 'node:fs/promises';
 import {compileAsync} from 'sass';
 import variablesTpl from '../sass-template/variables.scss?raw';
 import stylesTpl from '../sass-template/styles.scss?raw';
@@ -10,7 +10,7 @@ import extendTpl from '../sass-template/extend.scss?raw';
 import baseTpl from '../sass-template/_base.scss?raw';
 import postcss from 'postcss';
 
-const  autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer');
 
 export function getUserHome(): string {
   const userHome = process.env.HOME;
@@ -52,9 +52,11 @@ export async function setupSassTemplate(): Promise<boolean> {
   };
 
   try {
-    await Promise.all(Object.entries(tplMap).map(([filename, filecontent]) => {
-      return writeFile(`${getUserHome()}/${folderName}/${filename}`, filecontent);
-    }));
+    await Promise.all(
+      Object.entries(tplMap).map(([filename, filecontent]) => {
+        return writeFile(`${getUserHome()}/${folderName}/${filename}`, filecontent);
+      }),
+    );
 
     return true;
   } catch (e) {
@@ -67,7 +69,11 @@ export async function writeScssFile(filename: string, filecontent: string) {
   return writeFile(`${getUserHome()}/${folderName}/${filename}`, filecontent);
 }
 
-export async function writeScssFileAndCompile(filename: string, filecontent: string, postCSSPluginsConfig?: any): Promise<string> {
+export async function writeScssFileAndCompile(
+  filename: string,
+  filecontent: string,
+  postCSSPluginsConfig?: any,
+): Promise<string> {
   const sassFileName = `${getUserHome()}/${folderName}/${filename}`;
   await writeFile(sassFileName, filecontent);
   const result = await compileAsync(sassFileName, {});

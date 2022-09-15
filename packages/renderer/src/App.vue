@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import VEditor from '/@/components/VEditor.vue';
-
 </script>
 
 <template>

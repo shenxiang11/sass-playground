@@ -55,7 +55,9 @@ onMounted(async () => {
     scssFiles.value = res.filenames;
 
     if (res.filenames.length !== 0) {
-      const contentFromFile = await readFile(`${workspace}/${res.filenames[0]}`, { encoding: 'utf8' });
+      const contentFromFile = await readFile(`${workspace}/${res.filenames[0]}`, {
+        encoding: 'utf8',
+      });
       content.value = contentFromFile.toString();
       editor.setValue(content.value);
       activeScssFile.value = res.filenames[0];
@@ -64,14 +66,14 @@ onMounted(async () => {
 });
 
 async function handleScssFileChange(name: string) {
-  const contentFromFile = await readFile(`${workspace}/${name}`, { encoding: 'utf8' });
+  const contentFromFile = await readFile(`${workspace}/${name}`, {encoding: 'utf8'});
   content.value = contentFromFile.toString();
   editor?.setValue(content.value);
   compiledContent.value = '';
 }
 
 async function saveAndCompile() {
-  const result = await writeScssFileAndCompile(activeScssFile.value,editor?.getValue() ?? '', {
+  const result = await writeScssFileAndCompile(activeScssFile.value, editor?.getValue() ?? '', {
     autoprefixer: {
       overrideBrowserslist: ['>0.02%', 'not dead'],
     },
@@ -163,5 +165,4 @@ async function saveAndCompile() {
     }
   }
 }
-
 </style>
