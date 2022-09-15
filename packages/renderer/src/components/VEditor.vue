@@ -72,7 +72,11 @@ async function handleScssFileChange(name: string) {
 }
 
 async function saveAndCompile() {
-  const result = await writeScssFileAndCompile(activeScssFile.value,editor?.getValue() ?? '')
+  const result = await writeScssFileAndCompile(activeScssFile.value,editor?.getValue() ?? '', {
+    autoprefixer: {
+      overrideBrowserslist: [">0.02%", "not dead"],
+    },
+  })
   compiledContent.value = result;
 }
 </script>

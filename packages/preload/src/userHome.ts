@@ -9,6 +9,8 @@ import mixinsTpl from '../sass-template/mixins.scss?raw';
 import extendTpl from '../sass-template/extend.scss?raw';
 import baseTpl from '../sass-template/_base.scss?raw';
 import {readdirSync} from './index';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
 
 export function getUserHome(): string {
   const userHome = process.env.HOME;
@@ -65,11 +67,24 @@ export async function writeScssFile(filename: string, filecontent: string) {
   return writeFile(`${getUserHome()}/${folderName}/${filename}`, filecontent);
 }
 
-export async function writeScssFileAndCompile(filename: string, filecontent: string): Promise<string> {
+export async function writeScssFileAndCompile(filename: string, filecontent: string, postCSSPluginsConfig?: any): Promise<string> {
   const sassFileName = `${getUserHome()}/${folderName}/${filename}`;
   await writeFile(sassFileName, filecontent);
   const result = await compileAsync(sassFileName, {});
-  return result.css;
+  let css = result.css
+
+  if (postCSSPluginsConfig) {
+    const plugins = [];
+    const autoprefixerConfig = postCSSPluginsConfig['autoprefixer'];
+    if (autoprefixerConfig) {
+      plugins.push(autoprefixer(autoprefixerConfig));
+    }
+
+    const result = await postcss(plugins).process(css)
+    css = result.css
+  }
+
+  return css;
 }
 
 export async function getAllScssFiles() {

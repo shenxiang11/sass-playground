@@ -12,6 +12,7 @@
 }
 
 .message {
+  @extend %equal-heights;
   @extend %message-shared;
 }
 
